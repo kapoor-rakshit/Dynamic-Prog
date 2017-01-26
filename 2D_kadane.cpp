@@ -7,13 +7,23 @@ ll kadane(ll tp[],int n)
 {
     ll cur_max=tp[0];
     ll max_sum=tp[0];
+    start=0;
+    ed=0;
     for(int i=1;i<n;i++)
     {
-        cur_max=max(tp[i],cur_max+tp[i]);
-        if(cur_max==tp[i]) start=i;
-        max_sum=max(cur_max,max_sum);
-        if(max_sum==cur_max) ed=i;
+        if(tp[i]>(cur_max+tp[i]))          //operate values
+        {
+          start=i;
+          cur_max=tp[i];
+        }
+        else cur_max=cur_max+tp[i];      //operate
+        if(cur_max>max_sum)
+        {
+          ed=i;
+          max_sum=cur_max;
+        }
     }
+    if(start>ed) start=ed;             //NOTE
     return max_sum;
 }
 main()
@@ -31,21 +41,21 @@ main()
         int mx_right;
         int mx_bottom;
         ll tp[n];
-    for(int left=0;left<m;left++)
+    for(int left=0;left<m;left++)                         //left and right pointers
     {
         for(int right=left;right<m;right++)
         {
-            if(right==left)
+            if(right==left)                              //if left and right are equal then reset with current column
             {
                 for(int i=0;i<n;i++) tp[i]=a[i][right];
-                cur_sum=kadane(tp,n);
+                cur_sum=kadane(tp,n);                    //call kadane for maxsum and start and end index
             }
             else
             {
-                for(int i=0;i<n;i++) tp[i]+=a[i][right];
-                cur_sum=kadane(tp,n);
+                for(int i=0;i<n;i++) tp[i]+=a[i][right];   //operate values of each column 
+                cur_sum=kadane(tp,n);                      //call kadane for maxsum and start and end index
             }
-            if(cur_sum>mx_sum)
+            if(cur_sum>mx_sum)                           //update values
             {
                 mx_sum=cur_sum;
                 mx_left=left;
